@@ -20,6 +20,7 @@ const Detail = () => {
     const { itemId } = useParams();
     const navigate = useNavigate();
     const url = import.meta.env.VITE_URL + `api/items/${itemId}/detail`;
+    const delUrl = import.meta.env.VITE_URL + `api/items/${itemId}/delete`;
 
     const [item, setItem] = useState(null);
     const [open, setOpen] = useState(false);
@@ -31,8 +32,8 @@ const Detail = () => {
     }, [item]);
 
     const handleDelete = () => {
-        axios.delete(`http://localhost:5001/api/items/${itemId}`).then(() => {
-            navigate(`/${category}`);
+        axios.delete(delUrl).then(() => {
+            navigate(`/api/items/${item.category}`);
         });
     };
 
@@ -55,12 +56,14 @@ const Detail = () => {
                 style={{
                     width: "100%",
                     height: "auto",
-                    marginTop: "10px",
+                    marginTop: "2rem",
+                    border: "1px solid black",
                     borderRadius: "10px",
+                    boxShadow: "rgba(0, 0, 0, 0.4) 0px 0px 50px",
                 }}
             />
 
-            <Box sx={{ mt: 2 }}>
+            <Box sx={{ mt: 3, pl: 2, borderLeft: "2px solid black" }}>
                 <Typography variant="h6">
                     <strong>Diet:</strong> {item.diet}
                 </Typography>
@@ -78,7 +81,7 @@ const Detail = () => {
                 </Typography>
             </Box>
 
-            <Box sx={{ mt: 2 }}>
+            <Box sx={{ mt: 3, display: "flex" }}>
                 <Button
                     variant="contained"
                     color="warning"
@@ -107,8 +110,8 @@ const Detail = () => {
                 <DialogTitle>Confirm Delete</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Are you sure you want to delete this item? This action
-                        cannot be undone.
+                        Are you sure you want to delete{" "}
+                        <strong>{item.name}</strong>?
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>

@@ -69,7 +69,7 @@ router.put("/:id", upload.single("image"), async (req, res) => {
     res.json(updatedItem);
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id/delete", async (req, res) => {
     const { id } = req.params;
     await Item.findByIdAndDelete(id);
     res.json({ message: "Item deleted successfully" });
