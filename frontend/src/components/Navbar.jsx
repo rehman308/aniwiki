@@ -19,10 +19,10 @@ const Navbar = () => {
     const toggleDrawer = () => setMobileOpen(!mobileOpen);
 
     const navLinks = [
-        { title: "Home", path: "/" },
-        { title: "Animal", path: "/animal" },
-        { title: "Fish", path: "/fish" },
-        { title: "Insect", path: "/insect" },
+        { title: "Home", path: "/api/items" },
+        { title: "Animal", path: "/api/items/animal" },
+        { title: "Fish", path: "/api/items/fish" },
+        { title: "Insect", path: "/api/items/insect" },
         { title: "About", path: "/about" },
     ];
 
@@ -42,7 +42,7 @@ const Navbar = () => {
                     <Typography
                         variant="h4"
                         component={Link}
-                        to="/"
+                        to="/api/items"
                         sx={{ color: "white", textDecoration: "none" }}>
                         AniWiki
                     </Typography>

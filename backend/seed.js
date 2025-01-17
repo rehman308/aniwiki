@@ -341,22 +341,16 @@ const mongoose = require("mongoose");
 const Item = require("./models/Item");
 
 async function seedDatabase() {
-    try {       
+    try {
         await Item.deleteMany({});
-
-        // Combine all items into one array
         const allItems = [...data.animals, ...data.fishes, ...data.insects];
-
-        // Insert all items
         await Item.insertMany(allItems);
-
         console.log("Database seeded successfully!");
     } catch (error) {
         console.error("Error seeding database:", error);
     }
 }
 
-// If using MongoDB with Mongoose
 mongoose
     .connect("mongodb://127.0.0.1:27017/aniwiki")
     .then(() => {
@@ -372,5 +366,4 @@ mongoose
         mongoose.disconnect();
     });
 
-// Export the data for potential use in other files
 module.exports = data;

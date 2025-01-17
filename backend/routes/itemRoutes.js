@@ -13,19 +13,19 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // Endpoints
-// Homepage
+// Homepage and Category Page
 router.get("/", async (req, res) => {
-    const items = await Item.find();
-    res.json(items);
+    if (Object.keys(req.query).length === 0) {
+        const items = await Item.find({});
+        res.json(items);
+    } else {
+        const items = await Item.find({ category: req.query.category });
+        items.length !== 0 ? res.json(items) : res.sendStatus(404);
+    }
 });
 
-router.get("/:category", async (req, res) => { 
-    const { category } = req.params;
-    const items = await Item.find({ category });  
-    res.json(items);
-});
-
-router.get("/item/:id", async (req, res) => {
+// Detail Page
+router.get("/:id/detail", async (req, res) => {
     const { id } = req.params;
     const item = await Item.findById(id);
     res.json(item);

@@ -1,74 +1,108 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
+
+import Loading from "../components/Loading";
+
 import {
-    Container,
-    Typography,
+    Box,
     Button,
+    Container,
     Dialog,
     DialogActions,
     DialogContent,
     DialogContentText,
     DialogTitle,
+    Typography,
 } from "@mui/material";
-import axios from "axios";
 
 const Detail = () => {
-    const { category, id } = useParams();
+    const { itemId } = useParams();
+    const navigate = useNavigate();
+    const url = import.meta.env.VITE_URL + `api/items/${itemId}/detail`;
+
     const [item, setItem] = useState(null);
     const [open, setOpen] = useState(false);
-    const navigate = useNavigate();
 
     useEffect(() => {
-        axios
-            .get(`http://localhost:5001/api/items/item/${id}`)
-            .then((response) => {
-                setItem(response.data);
-            });
-    }, [id]);
+        axios.get(url).then((response) => {
+            setItem(response.data);
+        });
+    }, [item]);
 
     const handleDelete = () => {
-        axios.delete(`http://localhost:5001/api/items/${id}`).then(() => {
+        axios.delete(`http://localhost:5001/api/items/${itemId}`).then(() => {
             navigate(`/${category}`);
         });
     };
 
-    if (!item) return <Typography>Loading...</Typography>;
+    if (!item) return <Loading />;
 
     return (
-        <Container sx={{ mt: 3 }}>
-            <Typography variant="h4" gutterBottom>
+        <Container
+            sx={{
+                mt: 3,
+            }}>
+            <Typography
+                variant="h4"
+                sx={{ letterSpacing: 5, borderBottom: "2px solid black" }}>
                 {item.name}
             </Typography>
+
             <img
-                src={`http://localhost:5001/${item.image}`}
+                src={item.image}
                 alt={item.imageAlt}
-                style={{ width: "100%", height: "auto", marginBottom: "20px" }}
+                style={{
+                    width: "100%",
+                    height: "auto",
+                    marginTop: "10px",
+                    borderRadius: "10px",
+                }}
             />
-            <Typography variant="body1" gutterBottom>
-                <strong>Diet:</strong> {item.diet}
-            </Typography>
-            <Typography variant="body1" gutterBottom>
-                <strong>Habitat:</strong> {item.habitat}
-            </Typography>
-            <Typography variant="body1" gutterBottom>
-                <strong>Life:</strong> {item.life} years
-            </Typography>
-            <Typography variant="body1" gutterBottom>
-                <strong>Description:</strong> {item.description}
-            </Typography>
-            <Button
-                variant="contained"
-                color="primary"
-                sx={{ mr: 2 }}
-                onClick={() => navigate(`/${category}/${id}/edit`)}>
-                Update
-            </Button>
-            <Button
-                variant="outlined"
-                color="error"
-                onClick={() => setOpen(true)}>
-                Delete
-            </Button>
+
+            <Box sx={{ mt: 2 }}>
+                <Typography variant="h6">
+                    <strong>Diet:</strong> {item.diet}
+                </Typography>
+
+                <Typography variant="h6">
+                    <strong>Habitat:</strong> {item.habitat}
+                </Typography>
+
+                <Typography variant="h6">
+                    <strong>Life:</strong> {item.life} years
+                </Typography>
+
+                <Typography variant="h6">
+                    <strong>Description:</strong> {item.description}
+                </Typography>
+            </Box>
+
+            <Box sx={{ mt: 2 }}>
+                <Button
+                    variant="contained"
+                    color="warning"
+                    sx={{ mr: 2 }}
+                    onClick={() => navigate(`/api/items/${item.category}`)}>
+                    {`Back to ${item.category}`}
+                </Button>
+
+                <Button
+                    variant="contained"
+                    color="primary"
+                    sx={{ mr: 2 }}
+                    onClick={() => navigate(`/${category}/${id}/edit`)}>
+                    Update
+                </Button>
+
+                <Button
+                    variant="contained"
+                    color="error"
+                    onClick={() => setOpen(true)}>
+                    Delete
+                </Button>
+            </Box>
+
             <Dialog open={open} onClose={() => setOpen(false)}>
                 <DialogTitle>Confirm Delete</DialogTitle>
                 <DialogContent>

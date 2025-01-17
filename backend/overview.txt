@@ -1,0 +1,4 @@
+Routes:
+api/items/ -> homepage
+api/items/?:category -> category page
+api/items/:itemID/detail -> detail page
